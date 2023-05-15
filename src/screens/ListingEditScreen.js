@@ -83,19 +83,20 @@ const categories = [
 
 const ListingEditScreen = () => {
     const location = useLocation();
+    const id = uuid.v4();
     const { url, addImage } = uploadImage();
+    let imgUrl = url;
 
     const handlerSubmit = async (listing) => {
-        const id = uuid.v4();
-        await addImage(listing.images[0], id).then((listing.images[0] = url));
+        await addImage(listing.images[0]);
         const res = await listingsApi.addListing({
             ...listing,
             location,
-            id: id,
-            images: [listing.images[0]],
+            id,
+            images: [imgUrl],
         });
 
-        console.log(res.id);
+        console.log(res);
     };
 
     return (

@@ -8,8 +8,8 @@ export const uploadImage = () => {
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState(null);
 
-    const addImage = async (image, id) => {
-        const img = await fetch(image);
+    const addImage = async (images, id) => {
+        const img = await fetch(images);
         const blob = await img.blob();
         const metadata = {
             contentType: "image/jpeg",
@@ -35,15 +35,13 @@ export const uploadImage = () => {
                         break;
                 }
             },
-            (error) => {
-                setError(error);
-            },
+            (error) => {},
             () => {
                 // Handle successful uploads on complete
                 // For instance, get the download URL: https://firebasestorage.googleapis.com/...
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     setUrl(downloadURL);
-                    // console.log("File available at", downloadURL);
+                    console.log("File available at", downloadURL);
                 });
             }
         );

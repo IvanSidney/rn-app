@@ -60,14 +60,17 @@ const getListings = async () => {
 //     return client.post(endpoint, object);
 // };
 const addListing = async (listing) => {
-    // console.log(2, listing);
-    const listingRef = await addDoc((database, endpoint, listing.id), {
+    console.log(2, listing);
+    const listingRef = await setDoc(doc(database, endpoint, listing.id), {
         categoryId: listing.category.value,
         id: listing.id,
         title: listing.title,
         price: listing.price,
+        location: listing.location,
+        images: [listing.images[0]],
     });
-    console.log("Document written with ID: ", listingRef.id);
+
+    console.log(333, listingRef.data());
 
     // const res = await addDoc(doc(listingRef, listing.id), {
     //     id: listing.id,
