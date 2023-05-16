@@ -3,7 +3,6 @@ import { doc, getDoc, getDocs, setDoc, collection } from "firebase/firestore";
 import { database } from "../config/firabase";
 
 const endpoint = "listings";
-
 const getListing = async (id) => {
     const docRef = doc(database, endpoint, id);
     const docSnap = await getDoc(docRef);

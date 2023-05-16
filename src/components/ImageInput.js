@@ -42,6 +42,7 @@ const ImageInput = ({ imageUri, onChangeImage }) => {
                 quality: 0.5,
             });
             if (!result.canceled) onChangeImage(result.assets[0].uri);
+            console.log(result.assets);
         } catch (error) {
             console.log(error);
         }

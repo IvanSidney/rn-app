@@ -87,7 +87,17 @@ const ListingEditScreen = () => {
     const { url, addImage } = uploadImage();
 
     const handlerSubmit = async (listing) => {
-        await addImage(listing.images[0], id);
+        function fileNameFromUrl(url) {
+            var matches = url.match(/\/([^\/?#]+)[^\/]*$/);
+            if (matches.length > 1) {
+                return matches[1];
+            }
+            return null;
+        }
+        const imgName = fileNameFromUrl(listing.images[0]);
+
+        await addImage(listing.images[0], imgName);
+
         listingsApi.addListing({
             ...listing,
             location,

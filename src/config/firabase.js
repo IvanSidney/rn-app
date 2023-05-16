@@ -1,16 +1,26 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import {
+    API_KEY,
+    AUTH_DOMAIN,
+    DATABASE_URL,
+    PROJECT_ID,
+    STORAGE_BUCKET,
+    MESSAGING_SENDER_ID,
+    APP_ID,
+    MEASUREMENT_ID,
+} from "@env";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBEmIBP8P68P9roLkeADudDTuMuMtg9nUQ",
-    authDomain: "initial-4b2a8.firebaseapp.com",
-    databaseURL: "https://initial-4b2a8-default-rtdb.firebaseio.com",
-    projectId: "initial-4b2a8",
-    storageBucket: "initial-4b2a8.appspot.com",
-    messagingSenderId: "9960921939",
-    appId: "1:9960921939:web:d6aecc4584e24149a7dfa6",
-    measurementId: "G-X1W0JSEKB9",
+    apiKey: API_KEY,
+    authDomain: AUTH_DOMAIN,
+    databaseURL: DATABASE_URL,
+    projectId: PROJECT_ID,
+    storageBucket: STORAGE_BUCKET,
+    messagingSenderId: MESSAGING_SENDER_ID,
+    appId: APP_ID,
+    measurementId: MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
