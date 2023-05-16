@@ -6,7 +6,7 @@ import { useState } from "react";
 export const uploadImage = () => {
     const [url, setUrl] = useState("");
     const [progress, setProgress] = useState(0);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(false);
 
     const addImage = async (images, id) => {
         const img = await fetch(images);
@@ -35,12 +35,15 @@ export const uploadImage = () => {
                         break;
                 }
             },
-            (error) => {},
+            (error) => {
+                setError(true);
+            },
             () => {
                 // Handle successful uploads on complete
                 // For instance, get the download URL: https://firebasestorage.googleapis.com/...
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     setUrl(downloadURL);
+                    setError(false);
                     console.log("File available at", downloadURL);
                 });
             }

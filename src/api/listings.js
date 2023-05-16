@@ -1,11 +1,4 @@
-import {
-    doc,
-    getDoc,
-    getDocs,
-    addDoc,
-    setDoc,
-    collection,
-} from "firebase/firestore";
+import { doc, getDoc, getDocs, setDoc, collection } from "firebase/firestore";
 
 import { database } from "../config/firabase";
 
@@ -32,36 +25,8 @@ const getListings = async () => {
     return newData;
 };
 
-// const addListing = (listing) => {
-//     const data = new FormData({});
-
-//     data.append("title", listing.title);
-
-//     data.append("price", listing.price);
-
-//     data.append("categoryId", listing.category.value);
-
-//     data.append("description", listing.description);
-
-//     listing.images.forEach((image, index) =>
-//         data.append("images", {
-//             name: "image" + index,
-//             type: "image/jpeg",
-//             uri: image,
-//         })
-//     );
-
-//     if (listing.location) data.append("location", listing.location);
-
-//     let object = {};
-//     data._parts.forEach((item) => (object[item[0]] = item[1]));
-//     console.log(object);
-
-//     return client.post(endpoint, object);
-// };
 const addListing = async (listing) => {
-    console.log(2, listing);
-    const listingRef = await setDoc(doc(database, endpoint, listing.id), {
+    await setDoc(doc(database, endpoint, listing.id), {
         categoryId: listing.category.value,
         id: listing.id,
         title: listing.title,
@@ -69,16 +34,6 @@ const addListing = async (listing) => {
         location: listing.location,
         images: [listing.images[0]],
     });
-
-    console.log(333, listingRef.data());
-
-    // const res = await addDoc(doc(listingRef, listing.id), {
-    //     id: listing.id,
-    //     title: listing.title,
-    //     price: listing.price,
-    //     image: listing.image,
-    // });
-    return listingRef;
 };
 
 export default {

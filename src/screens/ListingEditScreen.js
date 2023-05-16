@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
 import uuid from "react-native-uuid";
@@ -85,19 +85,21 @@ const ListingEditScreen = () => {
     const location = useLocation();
     const id = uuid.v4();
     const { url, addImage } = uploadImage();
-    let imgUrl = url;
 
-    const handlerSubmit = async (listing) => {
-        await addImage(listing.images[0]);
-        const res = await listingsApi.addListing({
-            ...listing,
-            location,
-            id,
-            images: [imgUrl],
-        });
-
-        console.log(res);
-    };
+    const handlerSubmit = useCallback(
+        async (listing) => {
+            console.log(listing.images[0]);
+            await addImage(listing.images[0], id).then(
+                await listingsApi.addListing({
+                    ...listing,
+                    location,
+                    id,
+                    images: [url],
+                })
+            );
+        },
+        [listingsApi]
+    );
 
     return (
         <Screen style={styles.container}>
