@@ -86,20 +86,15 @@ const ListingEditScreen = () => {
     const id = uuid.v4();
     const { url, addImage } = uploadImage();
 
-    const handlerSubmit = useCallback(
-        async (listing) => {
-            console.log(listing.images[0]);
-            await addImage(listing.images[0], id).then(
-                await listingsApi.addListing({
-                    ...listing,
-                    location,
-                    id,
-                    images: [url],
-                })
-            );
-        },
-        [listingsApi]
-    );
+    const handlerSubmit = async (listing) => {
+        await addImage(listing.images[0], id);
+        listingsApi.addListing({
+            ...listing,
+            location,
+            id,
+            images: [url],
+        });
+    };
 
     return (
         <Screen style={styles.container}>

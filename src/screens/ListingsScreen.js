@@ -34,6 +34,8 @@ const ListingScreen = ({ navigation }) => {
             <ActivitiIndicator visible={loading} />
             <FlatList
                 data={listings}
+                refreshing={false}
+                onRefresh={() => loadListings()}
                 keyExtractor={(listings) => listings?.id.toString()}
                 renderItem={({ item }) => (
                     <Card

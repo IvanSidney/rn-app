@@ -4,7 +4,7 @@ import { storage } from "../config/firabase";
 import { useState } from "react";
 
 export const uploadImage = () => {
-    const [url, setUrl] = useState("");
+    const [url, setUrl] = useState(null);
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState(false);
 
@@ -14,6 +14,7 @@ export const uploadImage = () => {
         const metadata = {
             contentType: "image/jpeg",
         };
+
         const storageRef = ref(storage, `images/${id}.jpg`);
         const uploadTask = uploadBytesResumable(storageRef, blob, metadata);
         uploadTask.on(

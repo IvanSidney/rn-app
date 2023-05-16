@@ -8,9 +8,9 @@ import ImageInput from "./src/components/ImageInput";
 import { uploadImage } from "./src/api/images";
 
 const Test = ({}) => {
-    const [image, setImage] = useState();
-    console.log(image);
-    const { url, addImage, error, progress } = uploadImage();
+    const [image, setImage] = useState(null);
+    console.log(storage.app.name);
+    const { url, addImage } = uploadImage();
     const onPress = () => {
         addImage(image, 44);
     };
