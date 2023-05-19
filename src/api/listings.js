@@ -25,13 +25,14 @@ const getListings = async () => {
 };
 
 const addListing = async (listing) => {
+    console.log(listing);
     await setDoc(doc(database, endpoint, listing.id), {
         categoryId: listing.category.value,
         id: listing.id,
         title: listing.title,
         price: listing.price,
         location: listing.location,
-        images: [listing.images[0]],
+        images: [listing.urlImage],
     });
 };
 

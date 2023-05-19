@@ -1,7 +1,9 @@
-import React, { useCallback } from "react";
+import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
 import uuid from "react-native-uuid";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
 
 import {
     AppForm,
@@ -12,9 +14,10 @@ import {
 import Screen from "../components/Screen";
 import CategoryPickerItem from "../components/CategoryPickerItem";
 import FormImagePicker from "../components/forms/FormImagePicker";
-import listingsApi from "../api/listings";
 import useLocation from "../hooks/useLocation";
-import { uploadImage } from "../api/images";
+import { storage } from "../config/firabase";
+import { database } from "../config/firabase";
+import UploadScreen from "./UploadScreen";
 
 const validationSchema = Yup.object().shape({
     title: Yup.string().required().min(1).label("Title"),
@@ -81,41 +84,93 @@ const categories = [
     },
 ];
 
-const ListingEditScreen = () => {
+const ListingEditScreen = ({ navigation }) => {
+    const [progress, setProgress] = useState(0);
+    const [uploadVisible, setUploadVisible] = useState(false);
+    const [error, setError] = useState(null);
+
+    const getInitialValues = () => ({
+        title: "",
+        price: "",
+        description: "",
+        category: null,
+        images: [],
+    });
     const location = useLocation();
     const id = uuid.v4();
-    const { url, addImage } = uploadImage();
 
-    const handlerSubmit = async (listing) => {
-        function fileNameFromUrl(url) {
-            var matches = url.match(/\/([^\/?#]+)[^\/]*$/);
-            if (matches.length > 1) {
-                return matches[1];
-            }
-            return null;
+    const handlerSubmit = (listing, { resetForm }) => {
+        setProgress(0);
+        setUploadVisible(true);
+        // function fileNameFromUrl(url) {
+        //     var matches = url.match(/\/([^\/?#]+)[^\/]*$/);
+        //     if (matches.length > 1) {
+        //         return matches[1];
+        //     }
+        //     return null;
+        // }
+        // const imgName = fileNameFromUrl(listing.images[0]);
+
+        // await addImage(listing.images[0], id);
+        addPost(listing);
+        if (error !== null) {
+            setUploadVisible(false);
+            return alert("Could not save the losting");
         }
-        const imgName = fileNameFromUrl(listing.images[0]);
 
-        await addImage(listing.images[0], imgName);
+        resetForm({ ...getInitialValues() });
+    };
+    const addPost = async (listing) => {
+        const img = await fetch(listing.images[0]);
+        const blob = await img.blob();
 
-        listingsApi.addListing({
-            ...listing,
-            location,
-            id,
-            images: [url],
-        });
+        const imageRef = ref(storage, `images/${id}.jpg`);
+        const uploadTask = uploadBytesResumable(imageRef, blob);
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                setProgress(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                switch (snapshot.state) {
+                    case "paused":
+                        console.log("Upload is paused");
+                        break;
+                    case "running":
+                        console.log("Upload is running");
+                        break;
+                }
+            },
+            (error) => {
+                setError(error);
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                    setDoc(doc(database, "listings", id), {
+                        categoryId: listing.category.value,
+                        id: id,
+                        title: listing.title,
+                        price: listing.price,
+                        location: location,
+                        description: listing.description,
+                        images: [url],
+                    }).catch((error) => setError(error));
+                });
+            }
+        );
     };
 
     return (
         <Screen style={styles.container}>
-            <AppForm
-                initialValues={{
-                    title: "",
-                    price: "",
-                    description: "",
-                    category: null,
-                    images: [],
+            <UploadScreen
+                onDone={() => {
+                    setUploadVisible(false);
                 }}
+                progress={progress}
+                visible={uploadVisible}
+            />
+            <AppForm
+                initialValues={getInitialValues()}
                 onSubmit={handlerSubmit}
                 validationSchema={validationSchema}
             >

@@ -12,12 +12,11 @@ import ListingEditScreen from "./src/screens/ListingEditScreen";
 import AuthNavigator from "./src/navigation/AuthNavigator";
 import navigationTheme from "./src/navigation/navigationTheme";
 import AppNavigator from "./src/navigation/AppNavigator";
-import Test from "./test";
+
 import ListingScreen from "./src/screens/ListingsScreen";
 
 export default function App() {
     return (
-        // <Test />
         <NavigationContainer theme={navigationTheme}>
             <AppNavigator />
         </NavigationContainer>

@@ -27,27 +27,35 @@ const ListingScreen = ({ navigation }) => {
         <Screen style={styles.screen}>
             {error && (
                 <>
-                    <AppText>Couldn't retrieve the listings.</AppText>
-                    <AppButton title="Retry" onPress={loadListings} />
+                    <AppText style={{ alignSelf: "center" }}>
+                        Couldn't retrieve the listings.
+                    </AppText>
+                    <AppButton title="Retry" onPress={() => loadListings()} />
                 </>
             )}
-            <ActivitiIndicator visible={loading} />
-            <FlatList
-                data={listings}
-                refreshing={false}
-                onRefresh={() => loadListings()}
-                keyExtractor={(listings) => listings?.id.toString()}
-                renderItem={({ item }) => (
-                    <Card
-                        title={item?.title}
-                        subTitle={"$" + item?.price}
-                        imageUrl={item.images[0]}
-                        onPress={() =>
-                            navigation.navigate(routes.LISTING_DETAILS, item)
-                        }
-                    />
-                )}
-            />
+            {loading ? (
+                <ActivitiIndicator visible={loading} />
+            ) : (
+                <FlatList
+                    data={listings}
+                    refreshing={false}
+                    onRefresh={() => loadListings()}
+                    keyExtractor={(listings) => listings.id.toString()}
+                    renderItem={({ item }) => (
+                        <Card
+                            title={item?.title}
+                            subTitle={"$" + item?.price}
+                            imageUrl={item?.images[0]}
+                            onPress={() =>
+                                navigation.navigate(
+                                    routes.LISTING_DETAILS,
+                                    item
+                                )
+                            }
+                        />
+                    )}
+                />
+            )}
         </Screen>
     );
 };

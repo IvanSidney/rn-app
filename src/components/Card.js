@@ -5,20 +5,23 @@ import {
     StyleSheet,
     TouchableWithoutFeedback,
 } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import colors from "../config/colors";
 import AppText from "./AppText";
 
 const Card = ({ title, subTitle, imageUrl, onPress }) => {
+    let uri = imageUrl
+        ? imageUrl
+        : "https://e7.pngegg.com/pngimages/709/358/png-clipart-price-toyservice-soil-business-no-till-farming-no-rectangle-pie.png";
     return (
         <TouchableWithoutFeedback onPress={onPress}>
             <View style={styles.card}>
                 <Image
                     style={styles.image}
-                    source={{ uri: imageUrl }}
-
-                    // { uri: imageUrl }
-                    // }
+                    source={{
+                        uri: uri,
+                    }}
                 />
                 <View style={styles.titleContainer}>
                     <AppText style={styles.title}>{title}</AppText>
