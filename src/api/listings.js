@@ -17,16 +17,18 @@ const getListing = async (id) => {
 
 const getListings = async () => {
     const querySnapshot = await getDocs(collection(database, endpoint));
-    const newData = [];
-    querySnapshot.forEach((item) => {
-        newData.push(item.data());
-    });
-    return newData;
+    // console.log(querySnapshot);
+    // const newData = [];
+    // querySnapshot.forEach((item) => {
+    //     newData.push(item.data());
+    // });
+    // return newData;
+    return querySnapshot.docs.map((doc) => doc.data());
 };
 
-const addListing = async (listing) => {
-    console.log(listing);
-    await setDoc(doc(database, endpoint, listing.id), {
+const addListing = (listing) => {
+    // console.log(listing);
+    setDoc(doc(database, endpoint, listing.id), {
         categoryId: listing.category.value,
         id: listing.id,
         title: listing.title,
@@ -37,7 +39,7 @@ const addListing = async (listing) => {
 };
 
 export default {
-    getListings,
+    getListing,
     addListing,
     getListings,
 };

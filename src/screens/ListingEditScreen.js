@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import * as Yup from "yup";
 import uuid from "react-native-uuid";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, disableNetwork, enableNetwork } from "firebase/firestore";
 
 import {
     AppForm,
@@ -18,6 +18,7 @@ import useLocation from "../hooks/useLocation";
 import { storage } from "../config/firabase";
 import { database } from "../config/firabase";
 import UploadScreen from "./UploadScreen";
+import AppButton from "../components/AppButton";
 
 const validationSchema = Yup.object().shape({
     title: Yup.string().required().min(1).label("Title"),
@@ -98,6 +99,12 @@ const ListingEditScreen = ({ navigation }) => {
     });
     const location = useLocation();
     const id = uuid.v4();
+    const offDB = async () => {
+        await disableNetwork(database);
+    };
+    const onDB = async () => {
+        await enableNetwork(database);
+    };
 
     const handlerSubmit = (listing, { resetForm }) => {
         setProgress(0);
@@ -203,6 +210,8 @@ const ListingEditScreen = ({ navigation }) => {
                     placeholder="Description"
                 />
                 <SubmitButton title={"Post"} />
+                <AppButton onPress={offDB} title={"off"} />
+                <AppButton onPress={onDB} title={"on"} />
             </AppForm>
         </Screen>
     );

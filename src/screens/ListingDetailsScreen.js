@@ -4,9 +4,14 @@ import { View, StyleSheet, Image } from "react-native";
 import AppText from "../components/AppText";
 import colors from "../config/colors";
 import { ListItem } from "../components/lists";
+import AppButton from "../components/AppButton";
+import listings from "../api/listings";
 
 const ListingDetailsScreen = ({ route }) => {
     const listing = route.params;
+    const getP = () => {
+        listings.getListing(listing.id);
+    };
 
     return (
         <View>
@@ -22,6 +27,7 @@ const ListingDetailsScreen = ({ route }) => {
                     />
                 </View>
             </View>
+            <AppButton onPress={getP} title={"get"} />
         </View>
     );
 };

@@ -8,7 +8,7 @@ const store = async (key, value) => {
     try {
         const item = {
             value,
-            timestamp: Date.name(),
+            timestamp: Date.now(),
         };
         await AsuncStorage.setItem(prefix + key, JSON.stringify(item));
     } catch (error) {

@@ -39,7 +39,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "jsEngine": "hermes"
-    
+    "jsEngine": "hermes",
+    "extra": {
+      "eas": {
+        "projectId": "cd4fbad8-92a7-4fc6-9458-6d1f2f8907ae"
+      }
+    }
   }
 }
