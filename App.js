@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 
-import React from "react";
+import React, { useState } from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { Button, StyleSheet, Text } from "react-native";
@@ -14,12 +14,19 @@ import navigationTheme from "./src/navigation/navigationTheme";
 import AppNavigator from "./src/navigation/AppNavigator";
 
 import ListingScreen from "./src/screens/ListingsScreen";
+import OfflineNotice from "./src/components/OfflineNotice";
+import LoginScreen from "./src/screens/LoginScreen";
+import RootNavigator from "./src/navigation/RootNavigator";
+import AuthContext from "./src/auth/context";
 
 export default function App() {
+    const [user, setUser] = useState();
+
     return (
-        <NavigationContainer theme={navigationTheme}>
-            <AppNavigator />
-        </NavigationContainer>
+        <AuthContext.Provider value={{ user, setUser }}>
+            <OfflineNotice />
+            <RootNavigator />
+        </AuthContext.Provider>
     );
 }
 

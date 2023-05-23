@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 import * as Yup from "yup";
 import uuid from "react-native-uuid";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { doc, setDoc, disableNetwork, enableNetwork } from "firebase/firestore";
 
 import {
     AppForm,
@@ -18,7 +17,8 @@ import useLocation from "../hooks/useLocation";
 import { storage } from "../config/firabase";
 import { database } from "../config/firabase";
 import UploadScreen from "./UploadScreen";
-import AppButton from "../components/AppButton";
+
+import listings from "../api/listings";
 
 const validationSchema = Yup.object().shape({
     title: Yup.string().required().min(1).label("Title"),
@@ -99,26 +99,10 @@ const ListingEditScreen = ({ navigation }) => {
     });
     const location = useLocation();
     const id = uuid.v4();
-    const offDB = async () => {
-        await disableNetwork(database);
-    };
-    const onDB = async () => {
-        await enableNetwork(database);
-    };
 
     const handlerSubmit = (listing, { resetForm }) => {
         setProgress(0);
         setUploadVisible(true);
-        // function fileNameFromUrl(url) {
-        //     var matches = url.match(/\/([^\/?#]+)[^\/]*$/);
-        //     if (matches.length > 1) {
-        //         return matches[1];
-        //     }
-        //     return null;
-        // }
-        // const imgName = fileNameFromUrl(listing.images[0]);
-
-        // await addImage(listing.images[0], id);
         addPost(listing);
         if (error !== null) {
             setUploadVisible(false);
@@ -153,15 +137,7 @@ const ListingEditScreen = ({ navigation }) => {
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                    setDoc(doc(database, "listings", id), {
-                        categoryId: listing.category.value,
-                        id: id,
-                        title: listing.title,
-                        price: listing.price,
-                        location: location,
-                        description: listing.description,
-                        images: [url],
-                    }).catch((error) => setError(error));
+                    listings.addListing(listing, id, url, location);
                 });
             }
         );
@@ -210,8 +186,6 @@ const ListingEditScreen = ({ navigation }) => {
                     placeholder="Description"
                 />
                 <SubmitButton title={"Post"} />
-                <AppButton onPress={offDB} title={"off"} />
-                <AppButton onPress={onDB} title={"on"} />
             </AppForm>
         </Screen>
     );

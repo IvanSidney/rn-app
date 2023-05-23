@@ -1,11 +1,6 @@
 import React from "react";
-import {
-    Image,
-    View,
-    StyleSheet,
-    TouchableWithoutFeedback,
-} from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { Image } from "react-native-expo-image-cache";
 
 import colors from "../config/colors";
 import AppText from "./AppText";
@@ -19,9 +14,11 @@ const Card = ({ title, subTitle, imageUrl, onPress }) => {
             <View style={styles.card}>
                 <Image
                     style={styles.image}
-                    source={{
-                        uri: uri,
+                    tint="light"
+                    preview={{
+                        uri: "https://e7.pngegg.com/pngimages/709/358/png-clipart-price-toyservice-soil-business-no-till-farming-no-rectangle-pie.png",
                     }}
+                    uri={uri}
                 />
                 <View style={styles.titleContainer}>
                     <AppText style={styles.title}>{title}</AppText>

@@ -1,16 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, StyleSheet } from "react-native";
 import * as Yup from "yup";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../config/firabase";
 
 import Screen from "../components/Screen";
-import { AppForm, SubmitButton, AppFormField } from "../components/forms";
+import {
+    ErrorMessage,
+    AppForm,
+    SubmitButton,
+    AppFormField,
+} from "../components/forms";
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().required().email().label("Email"),
-    password: Yup.string().required().min(4).label("Password"),
+    password: Yup.string().required().min(6).label("Password"),
 });
 
 const LoginScreen = ({}) => {
+    const [loginFailed, setLogitFailed] = useState(false);
+
+    const handleSubmit = ({ email, password }, { resetForm }) => {
+        signInWithEmailAndPassword(auth, email, password).catch((error) => {
+            if (error) return setLogitFailed(true);
+            else {
+                resetForm();
+            }
+        });
+    };
+
     return (
         <Screen style={styles.container}>
             <Image
@@ -19,9 +37,13 @@ const LoginScreen = ({}) => {
             />
             <AppForm
                 initialValues={{ email: "", password: "" }}
-                onSubmit={(values) => console.log(values)}
+                onSubmit={handleSubmit}
                 validationSchema={validationSchema}
             >
+                <ErrorMessage
+                    error="Invalid email and/or password."
+                    visible={loginFailed}
+                />
                 <AppFormField
                     autoCorrect={false}
                     autoCapitalize="none"

@@ -1,12 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {
-    getFirestore,
-    initializeFirestore,
-    memoryLocalCache,
-    disableNetwork,
-    persistentLocalCache,
-    Firestore,
-} from "firebase/firestore";
+import { initializeFirestore, memoryLocalCache } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import {
@@ -32,10 +25,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-// export const database = initializeFirestore(app, {
-//     localCache: persistentLocalCache(),
 
-// });
 export const database = initializeFirestore(app, {
     localCache: memoryLocalCache(),
 });
