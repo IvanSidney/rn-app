@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
 import uuid from "react-native-uuid";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 import {
     AppForm,
@@ -14,9 +13,8 @@ import Screen from "../components/Screen";
 import CategoryPickerItem from "../components/CategoryPickerItem";
 import FormImagePicker from "../components/forms/FormImagePicker";
 import useLocation from "../hooks/useLocation";
-import { storage } from "../config/firabase";
-import { database } from "../config/firabase";
 import UploadScreen from "./UploadScreen";
+import useImage from "../api/images";
 
 import listings from "../api/listings";
 
@@ -86,9 +84,9 @@ const categories = [
 ];
 
 const ListingEditScreen = ({ navigation }) => {
-    const [progress, setProgress] = useState(0);
+    const { addImage } = useImage();
+
     const [uploadVisible, setUploadVisible] = useState(false);
-    const [error, setError] = useState(null);
 
     const getInitialValues = () => ({
         title: "",
@@ -101,46 +99,13 @@ const ListingEditScreen = ({ navigation }) => {
     const id = uuid.v4();
 
     const handlerSubmit = (listing, { resetForm }) => {
-        setProgress(0);
+        listing.id = id;
+        listing.location = location;
+
         setUploadVisible(true);
-        addPost(listing);
-        if (error !== null) {
-            setUploadVisible(false);
-            return alert("Could not save the losting");
-        }
-
+        addImage(listing);
+        listings.addListing(listing);
         resetForm({ ...getInitialValues() });
-    };
-    const addPost = async (listing) => {
-        const img = await fetch(listing.images[0]);
-        const blob = await img.blob();
-
-        const imageRef = ref(storage, `images/${id}.jpg`);
-        const uploadTask = uploadBytesResumable(imageRef, blob);
-        uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-                setProgress(
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                );
-                switch (snapshot.state) {
-                    case "paused":
-                        console.log("Upload is paused");
-                        break;
-                    case "running":
-                        console.log("Upload is running");
-                        break;
-                }
-            },
-            (error) => {
-                setError(error);
-            },
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                    listings.addListing(listing, id, url, location);
-                });
-            }
-        );
     };
 
     return (
@@ -149,7 +114,6 @@ const ListingEditScreen = ({ navigation }) => {
                 onDone={() => {
                     setUploadVisible(false);
                 }}
-                progress={progress}
                 visible={uploadVisible}
             />
             <AppForm

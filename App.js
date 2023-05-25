@@ -18,6 +18,7 @@ import OfflineNotice from "./src/components/OfflineNotice";
 import LoginScreen from "./src/screens/LoginScreen";
 import RootNavigator from "./src/navigation/RootNavigator";
 import AuthContext from "./src/auth/context";
+import { StatusBar } from "expo-status-bar";
 
 export default function App() {
     const [user, setUser] = useState();
@@ -26,6 +27,7 @@ export default function App() {
         <AuthContext.Provider value={{ user, setUser }}>
             <OfflineNotice />
             <RootNavigator />
+            <StatusBar style="dark" translucent hidden={false} />
         </AuthContext.Provider>
     );
 }

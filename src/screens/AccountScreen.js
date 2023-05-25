@@ -8,7 +8,6 @@ import Icon from "../components/Icon";
 import routes from "../navigation/routes";
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firabase";
-import RootNavigator from "../navigation/RootNavigator";
 import AuthContext from "../auth/context";
 
 const menuItems = [

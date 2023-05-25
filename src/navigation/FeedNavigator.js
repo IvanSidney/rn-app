@@ -10,7 +10,7 @@ const FeedNavigator = ({}) => {
     return (
         <Stack.Navigator
             screenOptions={{
-                presentation: "modal",
+                presentation: "card",
                 headerShown: false,
             }}
         >

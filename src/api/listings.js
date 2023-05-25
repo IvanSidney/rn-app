@@ -28,16 +28,17 @@ const getListings = async () => {
     return querySnapshot.docs.map((doc) => doc.data());
 };
 
-const addListing = (listing, id, url, location) => {
-    setDoc(doc(database, endpoint, id), {
+const addListing = (listing) => {
+    const date = Timestamp.fromMillis(now()).toDate();
+    setDoc(doc(database, endpoint, listing.id), {
         categoryId: listing.category.value,
-        id: id,
+        id: listing.id,
         title: listing.title,
         price: listing.price,
-        location: { ...location },
+        location: { ...listing.location },
         description: listing.description,
-        images: [url],
-        date: Timestamp.fromMillis(now()).toDate(),
+        images: [listing.url],
+        date,
     });
 };
 

@@ -13,7 +13,7 @@ import useApi from "../hooks/useApi";
 
 const ListingScreen = ({ navigation }) => {
     const {
-        data: listings,
+        data: listing,
         error,
         loading,
         request: loadListings,
@@ -37,7 +37,7 @@ const ListingScreen = ({ navigation }) => {
                 <ActivitiIndicator visible={loading} />
             ) : (
                 <FlatList
-                    data={listings}
+                    data={listing}
                     refreshing={false}
                     onRefresh={() => loadListings()}
                     keyExtractor={(listings) => listings.id.toString()}
@@ -45,7 +45,7 @@ const ListingScreen = ({ navigation }) => {
                         <Card
                             title={item?.title}
                             subTitle={"$" + item?.price}
-                            imageUrl={item?.images[0]}
+                            imageUrl={null}
                             onPress={() =>
                                 navigation.navigate(
                                     routes.LISTING_DETAILS,
