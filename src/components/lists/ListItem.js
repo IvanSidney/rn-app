@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     image: {
         width: 70,
         height: 70,
-        borderRadius: 35,
+        borderRadius: 25,
     },
     titleContainer: {
         flex: 1,

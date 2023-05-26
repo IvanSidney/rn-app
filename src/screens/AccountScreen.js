@@ -45,7 +45,11 @@ const AccountScreen = ({ navigation }) => {
                 <ListItem
                     title={user.displayName}
                     subTitle={user.email}
-                    image={{ uri: user.photoURL }}
+                    image={
+                        user.photoURL
+                            ? { uri: user.photoURL }
+                            : require("../../assets/user.png")
+                    }
                 />
             </View>
             <View style={styles.container}>

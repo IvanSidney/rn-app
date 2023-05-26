@@ -18,7 +18,7 @@ const Card = ({ title, subTitle, imageUrl, onPress }) => {
                     preview={{
                         uri: "https://e7.pngegg.com/pngimages/709/358/png-clipart-price-toyservice-soil-business-no-till-farming-no-rectangle-pie.png",
                     }}
-                    uri={uri}
+                    uri={imageUrl}
                 />
                 <View style={styles.titleContainer}>
                     <AppText style={styles.title}>{title}</AppText>

@@ -29,6 +29,7 @@ const getListings = async () => {
 };
 
 const addListing = (listing) => {
+    console.log(2);
     const date = Timestamp.fromMillis(now()).toDate();
     setDoc(doc(database, endpoint, listing.id), {
         categoryId: listing.category.value,
@@ -37,7 +38,7 @@ const addListing = (listing) => {
         price: listing.price,
         location: { ...listing.location },
         description: listing.description,
-        images: [listing.url],
+        imageUrl: listing.imageUrl,
         date,
     });
 };

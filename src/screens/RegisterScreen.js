@@ -28,10 +28,8 @@ const RegisterScreen = ({}) => {
             .then((res) => {
                 console.log(res);
                 updateProfile(auth.currentUser, {
-                    //Replace "Jane Q. User" to the username you desire
-                    //And Replace the PhotoURL with the desired Image
                     displayName: name,
-                    photoURL: "https://i.pravatar.cc/300",
+                    photoURL: "",
                 })
                     .then(() => {
                         console.log("Update");

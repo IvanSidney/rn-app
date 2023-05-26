@@ -98,13 +98,14 @@ const ListingEditScreen = ({ navigation }) => {
     const location = useLocation();
     const id = uuid.v4();
 
-    const handlerSubmit = (listing, { resetForm }) => {
+    const handlerSubmit = async (listing, { resetForm }) => {
         listing.id = id;
         listing.location = location;
 
         setUploadVisible(true);
-        addImage(listing);
-        listings.addListing(listing);
+        const imageUrl = await addImage(listing);
+        console.log(1, imageUrl);
+        listings.addListing({ ...listing, imageUrl });
         resetForm({ ...getInitialValues() });
     };
 

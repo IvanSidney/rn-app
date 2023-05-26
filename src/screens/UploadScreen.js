@@ -6,7 +6,6 @@ const UploadScreen = ({ onDone, visible = false }) => {
     return (
         <Modal visible={visible}>
             <View style={styles.container}>
-                (
                 <LottieView
                     autoPlay
                     onAnimationFinish={onDone}
@@ -14,7 +13,6 @@ const UploadScreen = ({ onDone, visible = false }) => {
                     style={styles.animation}
                     source={require("../../assets/animations/done.json")}
                 />
-                )
             </View>
         </Modal>
     );
